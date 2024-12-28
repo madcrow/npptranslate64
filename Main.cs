@@ -226,8 +226,8 @@ namespace nppTranslateCS
 
                 logEncodingInfo();
 
-                Encoding w1252 = Encoding.GetEncoding(1252);
-                string converted = Encoding.UTF8.GetString(w1252.GetBytes(selected));
+                Encoding defEncoding = Encoding.Default;
+                string converted = Encoding.UTF8.GetString(defEncoding.GetBytes(selected));
 
                 Util.writeInfoLog("Final selected text after conversion: " + converted);
 
@@ -479,8 +479,17 @@ namespace nppTranslateCS
 
                 }*/
                 // databird sàrl
+                
+                
                 CopyTranslatedTextDataToClipBoard(transResult);
-                MessageBox.Show("Translation:\n" + transResult + "\n\ncopied to clipboard!");
+                //MessageBox.Show("Translation:\n" + transResult + "\n\ncopied to clipboard!");
+
+                string converted = Encoding.Default.GetString(Encoding.UTF8.GetBytes(transResult));
+
+
+                IntPtr editHandle = GetCurrentEditHandle();
+                Win32.SendMessage(editHandle, SciMsg.SCI_REPLACESEL, 0, converted);
+
             }
             catch (Exception ex)
             {
